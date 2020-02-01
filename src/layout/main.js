@@ -5,10 +5,15 @@ import { Footer } from '../components/footer'
 import { Test } from '../components/test'
 
 const global_style = css`
-  font-family: sans-serif;
+  :global() {
+    html {
+      font-family: sans-serif;
+      background-color: lavender;
+    }
+  }
 `
 
-const header_style = css`
+const header_style = css` 
   color: blue;
   font-size: 2rem;
 `
