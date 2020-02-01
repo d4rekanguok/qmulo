@@ -2,13 +2,18 @@ import { css } from 'linaria'
 import h from 'vhtml'
 
 import { Footer } from '../components/footer'
+import { Test } from '../components/test'
+
+const global_style = css`
+  font-family: sans-serif;
+`
 
 const header_style = css`
   color: blue;
   font-size: 2rem;
 `
 
-export default ({ title, content }) => (
+export default ({ title = 'Pen&Pillow', content }) => (
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
@@ -17,12 +22,13 @@ export default ({ title, content }) => (
       <title>{ title }</title>
       <link rel="stylesheet" type="text/css" href="/css/styles.css" />
     </head>
-    <body>
+    <body class={global_style}>
+      <Test>Hello Mello</Test>
       <h1 className={header_style}>Hello World</h1>
       <div dangerouslySetInnerHTML={{
         __html: content,
       }}></div>
-      <Footer />
+      <Footer year={2020} />
     </body>
   </html>
 )
