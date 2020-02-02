@@ -1,4 +1,6 @@
 import vhtml from 'vhtml'
 
-export const frag = ({ children }) => vhtml(null, null, ...children)
-export const h = vhtml
+export default {
+  frag: ({ children }) => vhtml(null, null, ...children),
+  h: vhtml,
+}

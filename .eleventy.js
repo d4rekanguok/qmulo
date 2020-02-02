@@ -1,5 +1,9 @@
 module.exports = (config) => {
   config.addPassthroughCopy({
+    // node_modules
+    'node_modules/instant.page/instantpage.js': 'js/instantpage.js',
+
+    // css
     '_11ty/css/': 'css/'
   })
 

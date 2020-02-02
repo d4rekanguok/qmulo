@@ -1,8 +1,8 @@
 {
   "plugins": [
     ["@babel/plugin-transform-react-jsx", {
-      "pragma": "h",
-      "pragmaFrag": "frag"
+      "pragma": "vhtml.h",
+      "pragmaFrag": "vhtml.frag"
     }]
   ]
 }
