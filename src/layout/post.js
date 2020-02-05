@@ -1,7 +1,7 @@
 import { css } from 'linaria'
 import vhtml from '../vhtml'
 
-import { HTML } from './html'
+import { HTML } from '../components/html'
 import { Footer } from '../components/footer'
 import { Test } from '../components/test'
 

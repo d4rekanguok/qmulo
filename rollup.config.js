@@ -5,7 +5,12 @@ import linaria from 'linaria/rollup'
 import babel from 'rollup-plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
+import eleventy from 'rollup-plugin-11ty'
+import serve from 'rollup-plugin-serve'
+import livereload from 'rollup-plugin-livereload'
 import css from 'rollup-plugin-css-only'
+
+const is_dev = process.env.ROLLUP_WATCH === 'true'
 
 const get_output = (input) => {
   const { name } = path.parse(input)
@@ -15,7 +20,7 @@ const get_output = (input) => {
   }
 }
 
-const apply_config = (input) => {
+const apply_config = (input, i) => {
   const { output_file, output_css } = get_output(input)
   return {
     input,
@@ -34,8 +39,23 @@ const apply_config = (input) => {
       css({
         output: output_css,
       }),
+      is_dev && eleventy()
     ],
   }
 }
 
-export default glob.sync('src/layout/*.js').map(apply_config)
+const add_dev_plugins = (configs) => {
+  if (is_dev) {
+    configs[configs.length - 1].plugins.push(
+      serve({
+        contentBase: '_site',
+        port: 8080
+      })
+    )
+  }
+
+  return configs
+}
+
+const configs = glob.sync('src/layout/*.js').map(apply_config)
+export default add_dev_plugins(configs)

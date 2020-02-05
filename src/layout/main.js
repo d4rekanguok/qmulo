@@ -1,12 +1,12 @@
 import { css } from 'linaria'
 import vhtml from '../vhtml'
 
-import { HTML } from './html'
+import { HTML } from '../components/html'
 import { Footer } from '../components/footer'
 import { Test } from '../components/test'
 
 const header_style = css` 
-  color: green;
+  color: yellow;
   font-size: 2rem;
 `
 

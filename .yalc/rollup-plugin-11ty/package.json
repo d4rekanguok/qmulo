@@ -1,0 +1,9 @@
+{
+  "name": "rollup-plugin-11ty",
+  "version": "1.0.0-be9aebe6",
+  "main": "index.cjs.js",
+  "license": "MIT",
+  "scripts": {
+    "prepublishOnly": "rollup --config"
+  }
+}

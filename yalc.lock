@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "rollup-plugin-11ty": {
+      "signature": "be9aebe6cd385daa67f62899bf4c8ba3",
+      "file": true
+    }
+  }
+}
