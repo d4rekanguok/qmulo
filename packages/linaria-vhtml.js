@@ -1,6 +1,23 @@
 import vhtml from './vhtml'
 import is_prop_valid from '@emotion/is-prop-valid'
 
+export const styled = (tag_name) => (options) => {
+  const Tag = tag_name
+  const { vars } = options
+  return ({ children, className, style, ...props }) => {
+    const variables = serialize_variables(vars, { props })
+    const filtered_props = filter_props(props)
+    return (
+      <Tag 
+        {...filtered_props}
+        style={[style, variables].join(' ')} 
+        className={[options.class, className].join(' ')}>
+          { children }
+      </Tag>
+    )
+  }
+}
+
 function serialize_variables(vars, { props }) {
   return Object.entries(vars).map(([ variable_name, fns ]) => {
     const value = fns[0](props)
@@ -17,14 +34,4 @@ function filter_props(props) {
       }
       return valid_props
     }, {})
-}
-
-export const styled = (tag_name) => (options) => {
-  const Tag = tag_name
-  const { vars } = options
-  return ({ children, className, ...props }) => {
-    const styles = serialize_variables(vars, { props })
-    const valid_props = filter_props(props)
-    return <Tag {...valid_props} style={styles} className={[options.class, className].join(' ')}>{ children }</Tag>
-  }
 }

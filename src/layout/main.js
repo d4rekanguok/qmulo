@@ -15,7 +15,7 @@ export default ({ title = 'Pen&Pillow', collections }) => (
   <HTML head={
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
   }>
-    <Box>Holla</Box>
+    <Box color="red">Holla</Box>
     <Box br={`500px`}>Hi</Box>
     <h1 className={header_style}>Main Page</h1>
     <ul>{collections.post.map((post) => (
