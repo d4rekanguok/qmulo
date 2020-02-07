@@ -3,7 +3,6 @@ import vhtml from '_vhtml'
 
 import { HTML } from '../components/html'
 import { Footer } from '../components/footer'
-import { Test } from '../components/test'
 
 const header_style = css` 
   color: green;
@@ -14,7 +13,6 @@ export default ({ title = 'Pen&Pillow', content }) => (
   <HTML head={
     <link rel="stylesheet" type="text/css" href="/css/post.css" />
   }>
-    <Test>Hello Mello Jello Shello</Test>
     <h1 className={header_style}>Hello World</h1>
     <div dangerouslySetInnerHTML={{
       __html: content,

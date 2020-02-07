@@ -3,7 +3,6 @@ import vhtml from '_vhtml'
 
 import { HTML } from '../components/html'
 import { Footer } from '../components/footer'
-import { Test } from '../components/test'
 import { Box } from '../components/box'
 
 const header_style = css` 
