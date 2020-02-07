@@ -1,4 +1,4 @@
-import vhtml from '../vhtml'
+import vhtml from '_vhtml'
 import { css } from 'linaria'
 
 const global_style = css`

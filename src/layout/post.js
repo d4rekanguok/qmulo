@@ -1,5 +1,5 @@
 import { css } from 'linaria'
-import vhtml from '../vhtml'
+import vhtml from '_vhtml'
 
 import { HTML } from '../components/html'
 import { Footer } from '../components/footer'

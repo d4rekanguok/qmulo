@@ -4,8 +4,9 @@ import glob from 'glob'
 import linaria from 'linaria/rollup'
 import babel from 'rollup-plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
+import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
-import eleventy from 'rollup-plugin-11ty'
+import eleventy from './packages/rollups-plugin-11ty'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import css from 'rollup-plugin-css-only'
@@ -30,6 +31,12 @@ const apply_config = (input, i) => {
     },
     external: ['vhtml'],
     plugins: [
+      alias({
+        entries: {
+          '_vhtml': path.resolve(__dirname, './packages/vhtml'),
+          'linaria/react': path.resolve(__dirname, './packages/linaria-vhtml')
+        }
+      }),
       babel(),
       resolve(),
       commonjs(),
