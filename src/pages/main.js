@@ -6,7 +6,7 @@ import { Footer } from '../components/footer'
 import { Box } from '../components/box'
 import { Test } from '../components/test'
 
-const header_style = css` 
+const headerStyle = css` 
   color: yellow;
   font-size: 2rem;
 `
@@ -19,7 +19,7 @@ export function getData() {
   }
 }
 
-export default function ({ site, collections }) {
+export function render({ site, collections }) {
   return (
     <HTML head={
       <>
@@ -30,7 +30,7 @@ export default function ({ site, collections }) {
       <Test>Hey this should work</Test>
       <Box br={`500px`}></Box>
       {site.title} {site.url}
-      <h1 className={header_style}>Main Page</h1>
+      <h1 className={headerStyle}>Main Page</h1>
       <ul>{collections.post.map((post) => (
         <a href={post.url}><li>{post.data.title}</li></a>
       ))}</ul>

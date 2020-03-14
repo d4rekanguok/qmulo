@@ -5,7 +5,7 @@ import { HTML } from '../components/html'
 import { Footer } from '../components/footer'
 import { Test } from '../components/test'
 
-const header_style = css` 
+const headerStyle = css` 
   color: green;
   font-size: 2rem;
 `
@@ -19,10 +19,18 @@ export function getData() {
     content: {
       html: '<h1>Hi, Hello</h1><p>super cool</p>'
     }
+  }, {
+    metadata: {
+      permalink: 'post/hello-friend',
+      title: 'Hello Friend'
+    },
+    content: {
+      html: '<h1>Hi, Ho</h1>'
+    }
   }]
 }
 
-export default function ({ data }) {
+export function render({ data }) {
   const { metadata, content } = data
   return (
     <HTML head={
@@ -31,7 +39,7 @@ export default function ({ data }) {
         <script src="/js/post.extracted.js" defer />
       </>
     }>
-      <h1 className={header_style}>Hello World</h1>
+      <h1 className={headerStyle}>Hello World</h1>
       <div dangerouslySetInnerHTML={{
         __html: content.html,
       }}></div>

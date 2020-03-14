@@ -1,48 +1,60 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-const template_page = require('../_temp/pages/main')
-const template_post = require('../_temp/pages/post')
+const templatePage = require('../_temp/pages/main')
+const templatePost = require('../_temp/pages/post')
 
 // global data
-const data = require('../_data/site.json')
+const globalData = require('../_data/site.json')
 
-let post_data
-if (typeof template_post.getData === 'function') {
-  post_data = template_post.getData()
+const buildDir = path.join(__dirname, '../_site')
+fs.ensureDirSync(buildDir)
+
+;[templatePage, templatePost].forEach(page => {
+  const allPageData = extractData({ page })
+  allPageData.forEach(pageData => {
+    const { permalink } = pageData.metadata
+
+    renderHTML({
+      buildDir,
+      template: page.render,
+      data: {
+        site: globalData,
+        data: pageData,
+        collections: {
+          post: [],
+        },
+      },
+      permalink,
+    })
+  })
+})
+
+/**
+ * get data from page, also make it always an array
+ */
+function extractData({ page }) {
+  let pageData = []
+  if (typeof page.getData !== 'function') {
+    throw new Error(`[qmulo] Hey this page has no getData`)
+  }
+
+  const data = page.getData()
+  if (Array.isArray(data)) {
+    pageData = pageData.concat(data)
+  } else {
+    pageData.push(data)
+  }
+
+  return pageData
 }
-
-const build_dir = path.join(__dirname, '../_site')
-fs.ensureDirSync(build_dir)
-
-render_html({
-  build_dir,
-  template: template_page.default,
-  data: {
-    site: data,
-    collections: {
-      post: [],
-    },
-  },
-  html_path: template_page.getData()
-})
-
-render_html({
-  build_dir,
-  template: template_post.default,
-  data: {
-    data: post_data[0],
-    site: data,
-  },
-  html_path: post_data[0].metadata.permalink,
-})
 
 /**
  * If path_name is not already a `something.html`,
  * append `/index.html` to it (i.e `post/hello-word` -> `post/hello-word/index.html`)
  * @param {string} path_name 
  */
-function append_html_ext(path_name) {
+function appendHTMLExt(path_name) {
   const { ext } = path.parse(path_name)
   if (ext === '.html') return path_name
 
@@ -50,17 +62,25 @@ function append_html_ext(path_name) {
 }
 
 /**
+ * TODO: filter out all weird character stuff
+ * @param {string} permalink 
+ */
+function permalinkToHTMLPath(permalink) {
+  return appendHTMLExt(path.join(buildDir, permalink))
+}
+
+/**
  * Render each page
  */
-function render_html({
-  build_dir,
+function renderHTML({
+  buildDir,
   template,
   data,
-  html_path,
+  permalink,
 }) {
-  const rendered_page = template(data)
-  const _html_path = append_html_ext(path.join(build_dir, html_path))
+  const renderedPage = template(data)
+  const htmlPath = permalinkToHTMLPath(permalink)
 
-  fs.ensureFileSync(_html_path)
-  fs.writeFileSync(_html_path, rendered_page)
+  fs.ensureFileSync(htmlPath)
+  fs.writeFileSync(htmlPath, renderedPage)
 }
