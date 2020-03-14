@@ -13,23 +13,28 @@ fs.ensureDirSync(buildDir)
 
 const pages = glob
   .sync(path.join(__dirname, '../_temp/pages/*.js'))
-  .map(filePath => require(filePath)).forEach(page => {
-  const allPageData = extractData({ page })
-  allPageData.forEach(pageData => {
-    const { permalink } = pageData.metadata
+  .map(filePath => require(filePath))
 
-    renderHTML({
-      buildDir,
-      template: page.render,
-      data: {
-        site: globalData,
-        data: pageData,
-        collections: {
-          post: [],
-        },
+const allPageData = pages.reduce((acc, page) => {
+  const pageData = extractData({ page })
+  acc = acc.concat(pageData)
+  return acc
+}, [])
+
+allPageData.forEach(pageData => {
+  const { renderer, ..._pageData } = pageData
+  const { permalink } = _pageData.metadata
+  renderHTML({
+    buildDir,
+    renderer,
+    data: {
+      site: globalData,
+      data: _pageData,
+      collections: {
+        post: [],
       },
-      permalink,
-    })
+    },
+    permalink,
   })
 })
 
@@ -38,15 +43,22 @@ const pages = glob
  */
 function extractData({ page }) {
   let pageData = []
+  const renderer = page.render
   if (typeof page.getData !== 'function') {
     throw new Error(`[qmulo] Hey this page has no getData`)
   }
 
   const data = page.getData()
   if (Array.isArray(data)) {
-    pageData = pageData.concat(data)
+    pageData = data.map(datum => ({
+      ...datum,
+      renderer,
+    }))
   } else {
-    pageData.push(data)
+    pageData.push({
+      ...data,
+      renderer,
+    })
   }
 
   return pageData
@@ -77,11 +89,11 @@ function permalinkToHTMLPath(permalink) {
  */
 function renderHTML({
   buildDir,
-  template,
+  renderer,
   data,
   permalink,
 }) {
-  const renderedPage = template(data)
+  const renderedPage = renderer(data)
   const htmlPath = permalinkToHTMLPath(permalink)
 
   fs.ensureFileSync(htmlPath)
