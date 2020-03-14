@@ -11,6 +11,14 @@ const header_style = css`
   font-size: 2rem;
 `
 
+export function getData() {
+  return {
+    metadata: {
+      permalink: 'index.html',
+    }
+  }
+}
+
 export default function ({ site, collections }) {
   return (
     <HTML head={

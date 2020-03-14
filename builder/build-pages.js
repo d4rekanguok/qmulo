@@ -15,28 +15,16 @@ if (typeof template_post.getData === 'function') {
 const build_dir = path.join(__dirname, '../_site')
 fs.ensureDirSync(build_dir)
 
-function render_html({
-  build_dir,
-  template,
-  data,
-  path: file_path,
-}) {
-  const rendered_page = template(data)
-  const html_path = append_html_ext(path.join(build_dir, file_path))
-  fs.ensureFileSync(html_path)
-  fs.writeFileSync(html_path, rendered_page)
-}
-
 render_html({
   build_dir,
-  template: template_page,
+  template: template_page.default,
   data: {
     site: data,
     collections: {
       post: [],
     },
   },
-  path: 'index.html'
+  html_path: template_page.getData()
 })
 
 render_html({
@@ -46,7 +34,7 @@ render_html({
     data: post_data[0],
     site: data,
   },
-  path: post_data[0].metadata.permalink,
+  html_path: post_data[0].metadata.permalink,
 })
 
 /**
@@ -59,4 +47,20 @@ function append_html_ext(path_name) {
   if (ext === '.html') return path_name
 
   return path_name + '/index.html'
+}
+
+/**
+ * Render each page
+ */
+function render_html({
+  build_dir,
+  template,
+  data,
+  html_path,
+}) {
+  const rendered_page = template(data)
+  const _html_path = append_html_ext(path.join(build_dir, html_path))
+
+  fs.ensureFileSync(_html_path)
+  fs.writeFileSync(_html_path, rendered_page)
 }
