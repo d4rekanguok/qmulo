@@ -14,7 +14,8 @@ export function getData() {
   return [{
     metadata: {
       permalink: 'post/hello-world',
-      title: 'Hello World'
+      title: 'Hello World',
+      tags: 'post'
     },
     content: {
       html: '<h1>Hi, Hello</h1><p>super cool</p>'
@@ -22,7 +23,8 @@ export function getData() {
   }, {
     metadata: {
       permalink: 'post/hello-friend',
-      title: 'Hello Friend'
+      title: 'Hello Friend',
+      tags: 'post'
     },
     content: {
       html: '<h1>Hi, Ho</h1>'

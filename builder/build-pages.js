@@ -8,6 +8,9 @@ const templatePost = require('../_temp/pages/post')
 // global data
 const globalData = require('../_data/site.json')
 
+// collections
+const collections = {}
+
 const buildDir = path.join(__dirname, '../_site')
 fs.ensureDirSync(buildDir)
 
@@ -16,7 +19,7 @@ const pages = glob
   .map(filePath => require(filePath))
 
 const allPageData = pages.reduce((acc, page) => {
-  const pageData = extractData({ page })
+  const pageData = processData({ page })
   acc = acc.concat(pageData)
   return acc
 }, [])
@@ -30,37 +33,66 @@ allPageData.forEach(pageData => {
     data: {
       site: globalData,
       data: _pageData,
-      collections: {
-        post: [],
-      },
+      collections,
     },
     permalink,
   })
 })
 
 /**
+ * group data with tags
+ */
+function populateCollection({ data }) {
+  data.forEach(datum => {
+    const { permalink, tags: _tags, title } = datum.metadata
+    if (_tags) {
+      const tags = Array.isArray(_tags)
+        ? _tags
+        : [_tags]
+      
+      tags.forEach(tag => {
+        if (typeof collections[tag] === 'undefined') collections[tag] = []
+        collections[tag].push({
+          permalink,
+          title,
+        })
+      })
+    }
+  })
+}
+
+function permalinkToUrl(permalink) {
+  if (permalink.endsWith('/')) return permalink
+  if (path.parse(permalink).ext === '') {
+    return permalink + '/'
+  }
+  return permalink
+}
+
+/**
  * get data from page, also make it always an array
  */
-function extractData({ page }) {
-  let pageData = []
+function processData({ page }) {
   const renderer = page.render
+
   if (typeof page.getData !== 'function') {
     throw new Error(`[qmulo] Hey this page has no getData`)
   }
 
   const data = page.getData()
-  if (Array.isArray(data)) {
-    pageData = data.map(datum => ({
-      ...datum,
-      renderer,
-    }))
-  } else {
-    pageData.push({
-      ...data,
-      renderer,
-    })
-  }
+  const _pageData = Array.isArray(data)
+    ? data
+    : [data]
 
+  const pageData = _pageData.map(data => {
+    data.renderer = renderer
+    const { permalink } = data.metadata
+    data.metadata.permalink = permalinkToUrl(permalink)
+    return data
+  })
+
+  populateCollection({ data: pageData })
+  
   return pageData
 }
 

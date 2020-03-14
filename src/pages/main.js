@@ -32,7 +32,7 @@ export function render({ site, collections }) {
       {site.title} {site.url}
       <h1 className={headerStyle}>Main Page</h1>
       <ul>{collections.post.map((post) => (
-        <a href={post.url}><li>{post.data.title}</li></a>
+        <a href={post.permalink}><li>{post.title}</li></a>
       ))}</ul>
       <Footer year={1500} />
     </HTML>
