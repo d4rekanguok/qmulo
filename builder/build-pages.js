@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
+const glob = require('glob')
 
 const templatePage = require('../_temp/pages/main')
 const templatePost = require('../_temp/pages/post')
@@ -10,7 +11,9 @@ const globalData = require('../_data/site.json')
 const buildDir = path.join(__dirname, '../_site')
 fs.ensureDirSync(buildDir)
 
-;[templatePage, templatePost].forEach(page => {
+const pages = glob
+  .sync(path.join(__dirname, '../_temp/pages/*.js'))
+  .map(filePath => require(filePath)).forEach(page => {
   const allPageData = extractData({ page })
   allPageData.forEach(pageData => {
     const { permalink } = pageData.metadata
