@@ -23,7 +23,7 @@ const apply_config = (input, i) => {
   return {
     input,
     output: {
-      file: `_11ty/layout/${name}.11ty.js`,
+      file: `_temp/pages/${name}.js`,
       format: 'cjs',
     },
     external: ['vhtml'],
@@ -41,12 +41,11 @@ const apply_config = (input, i) => {
         sourceMap: process.env.NODE_ENV !== 'production',
       }),
       css({
-        output: `_11ty/css/${name}.css`,
+        output: `_bare_site/css/${name}.css`,
       }),
       harvest({
-        output: path.resolve(__dirname, `_site/js/${name}.extracted.js`)
+        output: path.resolve(__dirname, `_bare_site/js/${name}.extracted.js`)
       }),
-      is_dev && eleventy()
     ],
   }
 }
@@ -64,5 +63,5 @@ const add_dev_plugins = (configs) => {
   return configs
 }
 
-const configs = glob.sync('src/layout/*.js').map(apply_config)
+const configs = glob.sync('src/pages/*.js').map(apply_config)
 export default add_dev_plugins(configs)

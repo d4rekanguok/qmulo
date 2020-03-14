@@ -20,7 +20,7 @@
   "license": "MIT",
   "scripts": {
     "start": "rollup -c -w",
-    "build": "rollup --config && eleventy",
+    "build": "rollup --config",
     "serve": "eleventy --serve"
   },
   "devDependencies": {

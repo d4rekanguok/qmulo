@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-const main_page = require('../_11ty/layout/main.11ty')
+const main_page = require('../_temp/pages/main')
 
 const data = require('../_data/site.json')
 const rendered = main_page({
