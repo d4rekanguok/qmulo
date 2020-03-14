@@ -8,25 +8,22 @@ import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
 import eleventy from './packages/rollups-plugin-11ty'
 import serve from 'rollup-plugin-serve'
-import livereload from 'rollup-plugin-livereload'
 import css from 'rollup-plugin-css-only'
+import harvest from '@d4rekanguok/harvest/rollup'
 
 const is_dev = process.env.ROLLUP_WATCH === 'true'
 
-const get_output = (input) => {
+const get_file_name = (input) => {
   const { name } = path.parse(input)
-  return {
-    output_file: `_11ty/layout/${name}.11ty.js`,
-    output_css: `_11ty/css/${name}.css`,
-  }
+  return { name }
 }
 
 const apply_config = (input, i) => {
-  const { output_file, output_css } = get_output(input)
+  const { name } = get_file_name(input)
   return {
     input,
     output: {
-      file: output_file,
+      file: `_11ty/layout/${name}.11ty.js`,
       format: 'cjs',
     },
     external: ['vhtml'],
@@ -44,7 +41,10 @@ const apply_config = (input, i) => {
         sourceMap: process.env.NODE_ENV !== 'production',
       }),
       css({
-        output: output_css,
+        output: `_11ty/css/${name}.css`,
+      }),
+      harvest({
+        output: path.resolve(__dirname, `_site/js/${name}.extracted.js`)
       }),
       is_dev && eleventy()
     ],

@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@d4rekanguok/harvest": {
+      "signature": "9e4f65f6b2e0ca398480fa9939dbf129",
+      "file": true
+    }
+  }
+}

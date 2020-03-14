@@ -2,6 +2,7 @@
   "dependencies": {
     "@11ty/eleventy": "^0.10.0",
     "@babel/plugin-transform-react-jsx": "^7.8.3",
+    "@d4rekanguok/harvest": "file:.yalc/@d4rekanguok/harvest",
     "@rollup/plugin-alias": "^3.0.1",
     "@rollup/plugin-commonjs": "^11.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
@@ -18,7 +19,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "rollup": "rollup -c -w",
+    "start": "rollup -c -w",
     "build": "rollup --config && eleventy",
     "serve": "eleventy --serve"
   },

@@ -1,4 +1,5 @@
 module.exports = (config) => {
+  config.addJavaScriptFunction('double', x => x * 2)
   config.addPassthroughCopy({
     // node_modules
     'node_modules/instant.page/instantpage.js': 'js/instantpage.js',
