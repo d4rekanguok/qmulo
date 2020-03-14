@@ -6,7 +6,7 @@ import babel from 'rollup-plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
-import eleventy from './packages/rollups-plugin-11ty'
+import qmulo from './packages/rollup-plugin-qmulo'
 import serve from 'rollup-plugin-serve'
 import css from 'rollup-plugin-css-only'
 import harvest from '@d4rekanguok/harvest/rollup'
@@ -26,7 +26,7 @@ const apply_config = (input, i) => {
       file: `_temp/pages/${name}.js`,
       format: 'cjs',
     },
-    external: ['vhtml'],
+    external: ['vhtml', '@emotion/is-prop-valid'],
     plugins: [
       alias({
         entries: {
@@ -41,11 +41,12 @@ const apply_config = (input, i) => {
         sourceMap: process.env.NODE_ENV !== 'production',
       }),
       css({
-        output: `_bare_site/css/${name}.css`,
+        output: `_site/css/${name}.css`,
       }),
       harvest({
-        output: path.resolve(__dirname, `_bare_site/js/${name}.extracted.js`)
+        output: path.resolve(__dirname, `_site/js/${name}.extracted.js`)
       }),
+      is_dev && qmulo()
     ],
   }
 }
@@ -55,7 +56,7 @@ const add_dev_plugins = (configs) => {
     configs[configs.length - 1].plugins.push(
       serve({
         contentBase: '_site',
-        port: 8080
+        port: 5000
       })
     )
   }

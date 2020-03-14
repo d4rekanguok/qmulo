@@ -10,7 +10,20 @@ const header_style = css`
   font-size: 2rem;
 `
 
-export default function ({ title = 'Pen&Pillow', content }) {
+export function getData() {
+  return [{
+    metadata: {
+      permalink: 'post/hello-world',
+      title: 'Hello World'
+    },
+    content: {
+      html: '<h1>Hi, Hello</h1><p>super cool</p>'
+    }
+  }]
+}
+
+export default function ({ data }) {
+  const { metadata, content } = data
   return (
     <HTML head={
       <>
@@ -20,7 +33,7 @@ export default function ({ title = 'Pen&Pillow', content }) {
     }>
       <h1 className={header_style}>Hello World</h1>
       <div dangerouslySetInnerHTML={{
-        __html: content,
+        __html: content.html,
       }}></div>
       <Test>Heooo</Test>
       <Footer year={2020} />

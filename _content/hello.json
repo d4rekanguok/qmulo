@@ -1,0 +1,11 @@
+{
+  "frontmatter": {
+    "layout": "post",
+    "tags": "post",
+    "title": "Hello",
+    "permalink": "post/hello/index.html"
+  },
+  "content": {
+    "html": "<h1>Hello friends</h1>"
+  }
+}
