@@ -21,7 +21,7 @@ export default function ({ site, collections }) {
     }>
       <Test>Hey this should work</Test>
       <Box br={`500px`}></Box>
-      {site.title} {site.url} {this.double(120)}
+      {site.title} {site.url}
       <h1 className={header_style}>Main Page</h1>
       <ul>{collections.post.map((post) => (
         <a href={post.url}><li>{post.data.title}</li></a>
