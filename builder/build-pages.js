@@ -2,11 +2,8 @@ const fs = require('fs-extra')
 const path = require('path')
 const glob = require('glob')
 
-const templatePage = require('../_temp/pages/main')
-const templatePost = require('../_temp/pages/post')
-
 // global data
-const globalData = require('../_data/site.json')
+// const globalData = require('../_data/site.json')
 
 // collections
 const collections = {}
@@ -18,20 +15,28 @@ const pages = glob
   .sync(path.join(__dirname, '../_temp/pages/*.js'))
   .map(filePath => require(filePath))
 
+const globalData = glob
+  .sync(path.join(__dirname, '../_data/*.json'))
+  .reduce((acc, filePath) => {
+    const { name } = path.parse(filePath)
+    acc[name] = require(filePath)
+    return acc
+  }, {})
+
 const allPageData = pages.reduce((acc, page) => {
   const pageData = processData({ page })
   acc = acc.concat(pageData)
   return acc
 }, [])
 
-allPageData.forEach(pageData => {
+const renderP = allPageData.map(pageData => {
   const { renderer, ..._pageData } = pageData
   const { permalink } = _pageData.metadata
-  renderHTML({
+  return renderHTML({
     buildDir,
     renderer,
     data: {
-      site: globalData,
+      ...globalData,
       data: _pageData,
       collections,
     },
@@ -39,12 +44,14 @@ allPageData.forEach(pageData => {
   })
 })
 
+Promise.all(renderP)
+
 /**
  * group data with tags
  */
 function populateCollection({ data }) {
   data.forEach(datum => {
-    const { permalink, tags: _tags, title } = datum.metadata
+    const { tags: _tags } = datum.metadata
     if (_tags) {
       const tags = Array.isArray(_tags)
         ? _tags
@@ -52,10 +59,7 @@ function populateCollection({ data }) {
       
       tags.forEach(tag => {
         if (typeof collections[tag] === 'undefined') collections[tag] = []
-        collections[tag].push({
-          permalink,
-          title,
-        })
+        collections[tag].push(datum.metadata)
       })
     }
   })
@@ -86,8 +90,7 @@ function processData({ page }) {
 
   const pageData = _pageData.map(data => {
     data.renderer = renderer
-    const { permalink } = data.metadata
-    data.metadata.permalink = permalinkToUrl(permalink)
+    data.metadata.permalink = permalinkToUrl(data.metadata.permalink)
     return data
   })
 
@@ -119,7 +122,7 @@ function permalinkToHTMLPath(permalink) {
 /**
  * Render each page
  */
-function renderHTML({
+async function renderHTML({
   buildDir,
   renderer,
   data,
@@ -128,6 +131,6 @@ function renderHTML({
   const renderedPage = renderer(data)
   const htmlPath = permalinkToHTMLPath(permalink)
 
-  fs.ensureFileSync(htmlPath)
-  fs.writeFileSync(htmlPath, renderedPage)
+  await fs.ensureFile(htmlPath)
+  await fs.writeFile(htmlPath, renderedPage)
 }

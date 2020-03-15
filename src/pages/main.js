@@ -6,20 +6,35 @@ import { Footer } from '../components/footer'
 import { Box } from '../components/box'
 import { Test } from '../components/test'
 
+import { Image } from '../../plugins/process-image'
+
 const headerStyle = css` 
   color: yellow;
   font-size: 2rem;
 `
 
-export function getData() {
-  return {
-    metadata: {
-      permalink: 'index.html',
-    }
-  }
+const imageStyle = css`
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100px;
+`
+
+const List = ({ post }) => {
+  const { permalink, featuredImage, title } = post
+  return (
+    <a href={permalink}>
+      { featuredImage
+        ? <Image src={featuredImage} alt="wut" className={imageStyle} /> 
+        : null
+      }
+      <span>{ title }</span>
+    </a>
+  )
 }
 
 export function render({ site, collections }) {
+  const { post } = collections
   return (
     <HTML head={
       <>
@@ -28,13 +43,22 @@ export function render({ site, collections }) {
       </>
     }>
       <Test>Hey this should work</Test>
-      <Box br={`500px`}></Box>
       {site.title} {site.url}
       <h1 className={headerStyle}>Main Page</h1>
-      <ul>{collections.post.map((post) => (
-        <a href={post.permalink}><li>{post.title}</li></a>
+      <ul>{post.map((post) => (
+        <li>
+          <List post={post} />
+        </li>
       ))}</ul>
       <Footer year={1500} />
     </HTML>
   )
+}
+
+export function getData() {
+  return {
+    metadata: {
+      permalink: 'index.html',
+    }
+  }
 }

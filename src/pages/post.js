@@ -1,5 +1,6 @@
 import { css } from 'linaria'
 import vhtml from '_vhtml'
+import path from 'path'
 
 import { HTML } from '../components/html'
 import { Footer } from '../components/footer'
@@ -15,7 +16,8 @@ export function getData() {
     metadata: {
       permalink: 'post/hello-world',
       title: 'Hello World',
-      tags: 'post'
+      tags: 'post',
+      featuredImage: path.join(__dirname, '../images/hj-logo-flame.png'),
     },
     content: {
       html: '<h1>Hi, Hello</h1><p>super cool</p>'

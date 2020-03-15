@@ -26,7 +26,7 @@ const apply_config = (input, i) => {
       file: `_temp/pages/${name}.js`,
       format: 'cjs',
     },
-    external: ['vhtml', '@emotion/is-prop-valid'],
+    external: ['vhtml', '@emotion/is-prop-valid', 'path', 'fs-extra'],
     plugins: [
       alias({
         entries: {
