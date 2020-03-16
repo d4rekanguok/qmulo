@@ -5,12 +5,15 @@ import sizeOf from 'image-size'
 export function requestProcessImage({ filePath, resolutions = [480, 800]}) {
   const { name, ext } = path.parse(filePath)
   const { width, height } = sizeOf(filePath)
+  const imageSet = resolutions.map(resolution => `/assets/${name}-${resolution}w${ext}`)
+  const srcset = imageSet.map((imagePath, i) => `${imagePath} ${resolutions[i]}w`).join(',')
+  // transform({ input, width, ext, output })
+  
   return {
     width,
     height,
-    srcset: `/assets/${name}-480w${ext} 480w,
-             /assets/${name}-800w${ext} 800w`,
-    src: `/assets/${name}${ext}`
+    srcset,
+    src: imageSet[imageSet.length - 1],
   }
 }
 

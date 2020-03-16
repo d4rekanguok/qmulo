@@ -2,21 +2,18 @@ const fs = require('fs-extra')
 const path = require('path')
 const glob = require('glob')
 
-// global data
-// const globalData = require('../_data/site.json')
-
 // collections
 const collections = {}
 
-const buildDir = path.join(__dirname, '../_site')
+const buildDir = path.join(process.cwd(), './_site')
 fs.ensureDirSync(buildDir)
 
 const pages = glob
-  .sync(path.join(__dirname, '../_temp/pages/*.js'))
+  .sync(path.join(process.cwd(), './_temp/pages/*.js'))
   .map(filePath => require(filePath))
 
 const globalData = glob
-  .sync(path.join(__dirname, '../_data/*.json'))
+  .sync(path.join(process.cwd(), './_data/*.json'))
   .reduce((acc, filePath) => {
     const { name } = path.parse(filePath)
     acc[name] = require(filePath)
