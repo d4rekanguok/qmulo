@@ -11,9 +11,6 @@ import { Image } from '../../plugins/process-image'
 const imageStyle = css`
   position: relative;
   display: block;
-  width: 100%;
-  height: 100%;
-  background-color: lightblue;
 `
 
 const List = ({ post }) => {
@@ -21,7 +18,9 @@ const List = ({ post }) => {
   return (
     <a href={permalink}>
       { featuredImage
-        ? <Image src={featuredImage} alt="wut" className={imageStyle} /> 
+        ? (
+          <Image src={featuredImage} alt="wut" className={imageStyle} />
+        )
         : null
       }
       <span>{ title }</span>

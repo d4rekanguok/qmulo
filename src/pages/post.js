@@ -13,7 +13,6 @@ const headerStyle = css`
 `
 
 export function getData() {
-  console.log(getFile('../images/hj-logo-flame.png'),)
   return [{
     metadata: {
       permalink: 'post/hello-world',

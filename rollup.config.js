@@ -31,13 +31,15 @@ const apply_config = (input, i) => {
       '@emotion/is-prop-valid', 
       'path', 
       'fs-extra', 
-      'image-size'
+      'image-size',
+      'crypto',
+      '../builder/build-assets',
     ],
     plugins: [
       alias({
         entries: {
           '_vhtml': path.resolve(__dirname, './packages/vhtml'),
-          'linaria/react': path.resolve(__dirname, './packages/linaria-vhtml')
+          'linaria/react': path.resolve(__dirname, './packages/linaria-vhtml'),
         }
       }),
       babel(),

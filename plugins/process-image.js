@@ -1,25 +1,38 @@
 import vhtml from '_vhtml'
 import path from 'path'
 import sizeOf from 'image-size'
+import { addToProcessList } from '../builder/build-assets'
 
 export function requestProcessImage({ filePath, resolutions = [480, 800]}) {
   const { name, ext } = path.parse(filePath)
   const { width, height } = sizeOf(filePath)
   const imageSet = resolutions.map(resolution => `/assets/${name}-${resolution}w${ext}`)
   const srcset = imageSet.map((imagePath, i) => `${imagePath} ${resolutions[i]}w`).join(',')
-  // transform({ input, width, ext, output })
+
+  resolutions.forEach((resolution, i) => {
+    addToProcessList({
+      input: filePath,
+      width: resolution,
+      ext,
+      output: imageSet[i],
+    })
+  })
   
   return {
     width,
     height,
     srcset,
-    src: imageSet[imageSet.length - 1],
+    src: imageSet[0],
   }
 }
 
-export const Image = ({ src: filePath, alt, loading = 'lazy', className }) => {
-  const { src, srcset, width, height } = requestProcessImage({ filePath, resolutions: [480, 800] })
-  const sizes = `(max-width: 800px) 480px, 800px`
+export const Image = ({ src: filePath, alt, loading = 'lazy', className, wrapperClassName }) => {
+  const { src, srcset, width, height } = requestProcessImage({ filePath, resolutions: [480, 800, 1200] })
+  const sizes = `
+    (max-width: 375px) 240px,
+    (max-width: 640px) 400px,
+    (min-width: 641px) 600px,
+    400px`
 
   const frameStyle = `
     position: relative;
@@ -37,14 +50,14 @@ export const Image = ({ src: filePath, alt, loading = 'lazy', className }) => {
   `
 
   return (
-    <div style={frameStyle}>
+    <div style={frameStyle} className={wrapperClassName}>
       <div style={innerStyle}>
         <img
-          style="width: 100%;"
+          style="width: 100%; height: 100%;"
           className={className}
-          src={src}
           srcset={srcset}
           sizes={sizes}
+          src={src}
           alt={alt}
           loading={loading}
         />

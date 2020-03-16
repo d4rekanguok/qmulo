@@ -2,6 +2,8 @@ const fs = require('fs-extra')
 const path = require('path')
 const glob = require('glob')
 
+const { processAssets } = require('./build-assets')
+
 // collections
 const collections = {}
 
@@ -42,6 +44,8 @@ const renderP = allPageData.map(pageData => {
 })
 
 Promise.all(renderP)
+
+processAssets()
 
 /**
  * group data with tags
