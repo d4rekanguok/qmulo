@@ -14,7 +14,8 @@ exports.transform = async function(args) {
     .digest('hex')
   const result = processed.find({ id: { '$eq': id } })
   if (result) {
-    console.log(`Skipped: ${args.input} has already been processed.`)
+    const { fileName, width } = args
+    console.log(`Skipped: ${args.fileName} -> ${width} has already been transformed.`)
     return
   }
 

@@ -3,6 +3,7 @@ const Loki = require('lokijs')
 
 let imageCache = null
 
+// TODO: Need a way to confirm the output file still exists. If not, remove them from db.
 function getDatabase() {
   return new Promise((resolve, reject) => {
     if (imageCache !== null) {
@@ -16,9 +17,7 @@ function getDatabase() {
       })
       
       function cb(err) {
-        if (err) {
-          reject(err)
-        }
+        if (err) reject(err)
         let processed = _imageCache.getCollection('processed')
         if (processed === null) {
           processed = _imageCache.addCollection('processed')
@@ -29,8 +28,5 @@ function getDatabase() {
     }
   })
 }
-
-// const imageCache = new Loki(path.join(process.cwd(), '.cache', 'image.db'))
-// const processed = imageCache.addCollection('processed')
 
 exports.getDatabase = getDatabase

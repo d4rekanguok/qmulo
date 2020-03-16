@@ -4,13 +4,14 @@ import sizeOf from 'image-size'
 import { addToProcessList } from '../builder/build-assets'
 
 export function requestProcessImage({ filePath, resolutions = [480, 800], fallbackResolution = 0}) {
-  const { name, ext } = path.parse(filePath)
+  const { base, name, ext } = path.parse(filePath)
   const { width, height } = sizeOf(filePath)
   const imageSet = resolutions.map(resolution => `/assets/${name}-${resolution}w${ext}`)
   const srcset = imageSet.map((imagePath, i) => `${imagePath} ${resolutions[i]}w`).join(',')
 
   resolutions.forEach((resolution, i) => {
     addToProcessList({
+      fileName: base,
       input: filePath,
       width: resolution,
       ext,
