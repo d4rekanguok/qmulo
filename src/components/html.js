@@ -5,7 +5,7 @@ const global_style = css`
   :global() {
     html {
       font-family: sans-serif;
-      background-color: lightblue;
+      background-color: white;
     }
   }
 `
@@ -17,6 +17,7 @@ export const HTML = ({ title = 'Pen&Pillow', children, head = null }) => (
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       <title>{ title }</title>
+      <link rel="stylesheet" type="text/css" href="/css/reset.min.css" />
       {head}
     </head>
     <script src="/js/instantpage.js" type="module" defer />

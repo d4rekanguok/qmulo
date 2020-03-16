@@ -1,6 +1,7 @@
 import { css } from 'linaria'
 import vhtml from '_vhtml'
-import path from 'path'
+
+import { getFile } from '../../builder/get-file'
 
 import { HTML } from '../components/html'
 import { Footer } from '../components/footer'
@@ -12,12 +13,13 @@ const headerStyle = css`
 `
 
 export function getData() {
+  console.log(getFile('../images/hj-logo-flame.png'),)
   return [{
     metadata: {
       permalink: 'post/hello-world',
       title: 'Hello World',
       tags: 'post',
-      featuredImage: path.join(__dirname, '../images/hj-logo-flame.png'),
+      featuredImage: getFile('../images/hj-logo-flame.png'),
     },
     content: {
       html: '<h1>Hi, Hello</h1><p>super cool</p>'

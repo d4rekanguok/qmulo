@@ -8,16 +8,12 @@ import { Test } from '../components/test'
 
 import { Image } from '../../plugins/process-image'
 
-const headerStyle = css` 
-  color: yellow;
-  font-size: 2rem;
-`
-
 const imageStyle = css`
   position: relative;
   display: block;
   width: 100%;
-  height: 100px;
+  height: 100%;
+  background-color: lightblue;
 `
 
 const List = ({ post }) => {
@@ -44,7 +40,7 @@ export function render({ site, collections }) {
     }>
       <Test>Hey this should work</Test>
       {site.title} {site.url}
-      <h1 className={headerStyle}>Main Page</h1>
+      <h1>Main Page</h1>
       <ul>{post.map((post) => (
         <li>
           <List post={post} />
