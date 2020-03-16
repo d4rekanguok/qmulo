@@ -8,7 +8,9 @@ const buildDir = path.join(process.cwd(), './_site')
 fs.ensureDirSync(buildDir)
 
 // collections
-const collections = {}
+const collections = {
+  pages: []
+}
 
 run()
 
@@ -31,6 +33,8 @@ async function run() {
     acc = acc.concat(pageData)
     return acc
   }, [])
+
+  collections.pages = allPageData.map(allPageData => allPageData.metadata)
 
   console.log('[qmulo] Rendering pages')
   // render pages
