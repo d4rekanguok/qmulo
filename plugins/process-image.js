@@ -3,7 +3,7 @@ import path from 'path'
 import sizeOf from 'image-size'
 import { addToProcessList } from '../builder/build-assets'
 
-export function requestProcessImage({ filePath, resolutions = [480, 800]}) {
+export function requestProcessImage({ filePath, resolutions = [480, 800], fallbackResolution = 0}) {
   const { name, ext } = path.parse(filePath)
   const { width, height } = sizeOf(filePath)
   const imageSet = resolutions.map(resolution => `/assets/${name}-${resolution}w${ext}`)
@@ -22,17 +22,28 @@ export function requestProcessImage({ filePath, resolutions = [480, 800]}) {
     width,
     height,
     srcset,
-    src: imageSet[0],
+    src: imageSet[fallbackResolution],
   }
 }
 
-export const Image = ({ src: filePath, alt, loading = 'lazy', className, wrapperClassName }) => {
-  const { src, srcset, width, height } = requestProcessImage({ filePath, resolutions: [480, 800, 1200] })
+export const Image = ({
+  src: filePath,
+  alt,
+  loading = 'lazy',
+  className,
+  wrapperClassName
+}) => {
+  const { src, srcset, width, height } = requestProcessImage({
+    resolutions: [480, 800, 1200],
+    fallbackResolution: 1,
+    filePath,
+  })
   const sizes = `
     (max-width: 375px) 240px,
     (max-width: 640px) 400px,
     (min-width: 641px) 600px,
-    400px`
+    400px
+  `
 
   const frameStyle = `
     position: relative;

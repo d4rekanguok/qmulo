@@ -20,7 +20,7 @@ export const HTML = ({ title = 'Pen&Pillow', children, head = null }) => (
       <link rel="stylesheet" type="text/css" href="/css/reset.min.css" />
       {head}
     </head>
-    <script src="/js/instantpage.js" type="module" defer />
+    {/* <script src="/js/instantpage.js" type="module" defer /> */}
     <body class={global_style}>
       {children}
     </body>

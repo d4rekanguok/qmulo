@@ -2,30 +2,35 @@ const sharp = require('sharp')
 const path = require('path')
 const crypto = require('crypto')
 
-const { imageCache } = require('../builder/database')
-const processed = imageCache.getCollection('processed')
-
-const md5sum = crypto.createHash('md5')
+const { getDatabase } = require('../builder/database')
 
 exports.transform = async function(args) {
-  // const id = md5sum.update(JSON.stringify(args)).digest('hex')
-  // const result = processed.find({ id })
-  // if (result) return
+  const imageCache = await getDatabase()
+  const processed = imageCache.getCollection('processed')
+  
+  const id = crypto
+    .createHash('md5')
+    .update(JSON.stringify(args))
+    .digest('hex')
+  const result = processed.find({ id: { '$eq': id } })
+  if (result) {
+    console.log(`Skipped: ${args.input} has already been processed.`)
+    return
+  }
 
   const { input, width, ext, output } = args
   try {
-    console.log({ input })
     await sharp(input)
       .resize(width)
       .toFile(output)
+
+    processed.insert({
+      id,
+      args,
+    })
   } catch(err) {
     throw err
   }
-
-  // processed.insert({
-  //   id,
-  //   args,
-  // })
 
   console.log('image done')
 }

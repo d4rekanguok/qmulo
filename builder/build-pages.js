@@ -4,48 +4,59 @@ const glob = require('glob')
 
 const { processAssets } = require('./build-assets')
 
-// collections
-const collections = {}
-
 const buildDir = path.join(process.cwd(), './_site')
 fs.ensureDirSync(buildDir)
 
-const pages = glob
-  .sync(path.join(process.cwd(), './_temp/pages/*.js'))
-  .map(filePath => require(filePath))
+// collections
+const collections = {}
 
-const globalData = glob
-  .sync(path.join(process.cwd(), './_data/*.json'))
-  .reduce((acc, filePath) => {
-    const { name } = path.parse(filePath)
-    acc[name] = require(filePath)
+run()
+
+async function run() {
+
+  const pages = glob
+    .sync(path.join(process.cwd(), './_temp/pages/*.js'))
+    .map(filePath => require(filePath))
+
+  const globalData = glob
+    .sync(path.join(process.cwd(), './_data/*.json'))
+    .reduce((acc, filePath) => {
+      const { name } = path.parse(filePath)
+      acc[name] = require(filePath)
+      return acc
+    }, {})
+
+  const allPageData = pages.reduce((acc, page) => {
+    const pageData = processData({ page })
+    acc = acc.concat(pageData)
     return acc
-  }, {})
+  }, [])
 
-const allPageData = pages.reduce((acc, page) => {
-  const pageData = processData({ page })
-  acc = acc.concat(pageData)
-  return acc
-}, [])
-
-const renderP = allPageData.map(pageData => {
-  const { renderer, ..._pageData } = pageData
-  const { permalink } = _pageData.metadata
-  return renderHTML({
-    buildDir,
-    renderer,
-    data: {
-      ...globalData,
-      data: _pageData,
-      collections,
-    },
-    permalink,
+  console.log('[qmulo] Rendering pages')
+  // render pages
+  const renderP = allPageData.map(pageData => {
+    const { renderer, ..._pageData } = pageData
+    const { permalink } = _pageData.metadata
+    return renderHTML({
+      buildDir,
+      renderer,
+      data: {
+        ...globalData,
+        data: _pageData,
+        collections,
+      },
+      permalink,
+    })
   })
-})
+  
+  Promise.all(renderP)
 
-Promise.all(renderP)
+  // build assets post-render
+  console.log('[qmulo] Building Assets')
+  await processAssets()
 
-processAssets()
+  console.log('[qmulo] Done')
+}
 
 /**
  * group data with tags
