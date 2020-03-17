@@ -1,9 +1,9 @@
-const path = require('path')
-const { transform } = require('../plugins/sharp')
+import path from 'path'
+import { transform } from '../../../plugins/sharp'
 
 const processList = []
 
-exports.addToProcessList = function(jobArguments) {
+export function addToProcessList(jobArguments) {
   const { output } = jobArguments
   
   const siteDir = path.join(process.cwd(), '_site/')
@@ -15,7 +15,7 @@ exports.addToProcessList = function(jobArguments) {
   })
 }
 
-exports.processAssets = function({ processed }) {
+export function processAssets({ processed }) {
   const processP = processList.map((jobArguments) => transform(jobArguments, { processed }))
   return Promise.all(processP)
 }

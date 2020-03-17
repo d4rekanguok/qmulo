@@ -1,7 +1,7 @@
 import vhtml from '_vhtml'
 import path from 'path'
 import sizeOf from 'image-size'
-import { addToProcessList } from '../builder/build-assets'
+import { addToProcessList } from 'qmulo'
 
 export function requestProcessImage({ filePath, resolutions = [480, 800], fallbackResolution = 0}) {
   const { base, name, ext } = path.parse(filePath)

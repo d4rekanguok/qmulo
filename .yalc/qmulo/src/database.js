@@ -1,10 +1,10 @@
-const path = require('path')
-const Loki = require('lokijs')
+import path from 'path'
+import Loki from 'lokijs'
 
 let database = null
 
 // TODO: Need a way to confirm the output file still exists. If not, remove them from db.
-function getDatabase() {
+export function getDatabase() {
   return new Promise((resolve, reject) => {
     if (database !== null) {
       resolve(database)
@@ -28,5 +28,3 @@ function getDatabase() {
     }
   })
 }
-
-exports.getDatabase = getDatabase

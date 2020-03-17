@@ -1,8 +1,8 @@
-const sharp = require('sharp')
-const path = require('path')
-const crypto = require('crypto')
+import sharp from 'sharp'
+import path from 'path'
+import crypto from 'crypto'
 
-exports.transform = async function(args, { processed }) {
+export async function transform(args, { processed }) {
   const id = crypto
     .createHash('md5')
     .update(JSON.stringify(args))

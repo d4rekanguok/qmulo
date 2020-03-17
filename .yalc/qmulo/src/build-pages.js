@@ -1,9 +1,9 @@
-const fs = require('fs-extra')
-const path = require('path')
-const glob = require('glob')
+import fs from 'fs-extra'
+import path from 'path'
+import glob from 'glob'
 
-const { processAssets } = require('./build-assets')
-const { getDatabase } = require('./database')
+import { processAssets } from './build-assets'
+import { getDatabase } from './database'
 
 const buildDir = path.join(process.cwd(), './_site')
 fs.ensureDirSync(buildDir)
@@ -13,9 +13,7 @@ const collections = {
   pages: []
 }
 
-run()
-
-async function run() {
+export async function run() {
   // init database
   const database = await getDatabase()
 

@@ -1,7 +1,7 @@
 import { css } from 'linaria'
 import vhtml from '_vhtml'
 
-import { getFile } from '../../builder/get-file'
+import { getFile } from 'qmulo'
 
 import { HTML } from '../components/html'
 import { Footer } from '../components/footer'

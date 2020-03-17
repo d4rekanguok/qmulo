@@ -12,15 +12,15 @@ import harvest from '@d4rekanguok/harvest/rollup'
 import qmulo from './packages/rollup-plugin-qmulo'
 import serve from './packages/rollup-plugin-zeit-serve'
 
-const is_dev = process.env.ROLLUP_WATCH === 'true'
+const isDev = process.env.ROLLUP_WATCH === 'true'
 
-const get_file_name = (input) => {
+const getFileName = (input) => {
   const { name } = path.parse(input)
   return { name }
 }
 
-const apply_config = (input, i) => {
-  const { name } = get_file_name(input)
+const applyConfigs = (input, i) => {
+  const { name } = getFileName(input)
   return {
     input,
     output: {
@@ -34,7 +34,7 @@ const apply_config = (input, i) => {
       'fs-extra', 
       'image-size',
       'crypto',
-      '../builder/build-assets',
+      'qmulo',
     ],
     plugins: [
       alias({
@@ -59,8 +59,8 @@ const apply_config = (input, i) => {
   }
 }
 
-const add_dev_plugins = (configs) => {
-  if (is_dev) {
+const addDevPlugins = (configs) => {
+  if (isDev) {
     configs[configs.length - 1].plugins.push(
       serve({
         public: '_site',
@@ -72,5 +72,5 @@ const add_dev_plugins = (configs) => {
   return configs
 }
 
-const configs = glob.sync('src/pages/*.js').map(apply_config)
-export default add_dev_plugins(configs)
+const configs = glob.sync('src/pages/*.js').map(applyConfigs)
+export default addDevPlugins(configs)
