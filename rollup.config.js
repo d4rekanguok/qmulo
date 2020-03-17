@@ -7,7 +7,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
 import qmulo from './packages/rollup-plugin-qmulo'
-import serve from 'rollup-plugin-serve'
+import serve from './packages/rollup-plugin-zeit-serve'
 import css from 'rollup-plugin-css-only'
 import harvest from '@d4rekanguok/harvest/rollup'
 
@@ -63,8 +63,7 @@ const add_dev_plugins = (configs) => {
   if (is_dev) {
     configs[configs.length - 1].plugins.push(
       serve({
-        contentBase: '_site',
-        port: 5000
+        public: '_site',
       })
     )
   }

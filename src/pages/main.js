@@ -11,6 +11,7 @@ import { Image } from '../../plugins/process-image'
 const imageStyle = css`
   position: relative;
   display: block;
+  border: 1px solid red;
 `
 
 const List = ({ post }) => {

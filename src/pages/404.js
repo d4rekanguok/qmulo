@@ -11,7 +11,7 @@ export function render({ site, collections }) {
       <h1>Dev 404</h1>
       <ul>{pages.map(({ permalink, title }) => (
         <li>
-          <a href={permalink}>{ title } ({ permalink })</a>
+          <a href={permalink}>{permalink + (title ? ` - ${title}` : '')}</a>
         </li>
       ))}</ul>
     </HTML>
