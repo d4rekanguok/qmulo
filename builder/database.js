@@ -1,15 +1,15 @@
 const path = require('path')
 const Loki = require('lokijs')
 
-let imageCache = null
+let database = null
 
 // TODO: Need a way to confirm the output file still exists. If not, remove them from db.
 function getDatabase() {
   return new Promise((resolve, reject) => {
-    if (imageCache !== null) {
-      resolve(imageCache)
+    if (database !== null) {
+      resolve(database)
     } else {
-      const _imageCache = new Loki(path.join(process.cwd(), '.cache', 'image.db'), {
+      const _database = new Loki(path.join(process.cwd(), '.cache', 'image.db'), {
         autoload: true,
         autoloadCallback: cb,
         autosave: true,
@@ -18,12 +18,12 @@ function getDatabase() {
       
       function cb(err) {
         if (err) reject(err)
-        let processed = _imageCache.getCollection('processed')
+        let processed = _database.getCollection('processed')
         if (processed === null) {
-          processed = _imageCache.addCollection('processed')
+          processed = _database.addCollection('processed')
         }
-        imageCache = _imageCache
-        resolve(imageCache)
+        database = _database
+        resolve(database)
       }
     }
   })

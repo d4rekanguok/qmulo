@@ -15,7 +15,7 @@ exports.addToProcessList = function(jobArguments) {
   })
 }
 
-exports.processAssets = function() {
-  const processP = processList.map((jobArguments) => transform(jobArguments))
+exports.processAssets = function({ processed }) {
+  const processP = processList.map((jobArguments) => transform(jobArguments, { processed }))
   return Promise.all(processP)
 }

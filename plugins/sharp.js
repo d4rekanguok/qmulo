@@ -2,12 +2,7 @@ const sharp = require('sharp')
 const path = require('path')
 const crypto = require('crypto')
 
-const { getDatabase } = require('../builder/database')
-
-exports.transform = async function(args) {
-  const imageCache = await getDatabase()
-  const processed = imageCache.getCollection('processed')
-  
+exports.transform = async function(args, { processed }) {
   const id = crypto
     .createHash('md5')
     .update(JSON.stringify(args))

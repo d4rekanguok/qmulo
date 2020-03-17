@@ -3,6 +3,7 @@ const path = require('path')
 const glob = require('glob')
 
 const { processAssets } = require('./build-assets')
+const { getDatabase } = require('./database')
 
 const buildDir = path.join(process.cwd(), './_site')
 fs.ensureDirSync(buildDir)
@@ -15,6 +16,8 @@ const collections = {
 run()
 
 async function run() {
+  // init database
+  const database = await getDatabase()
 
   const pages = glob
     .sync(path.join(process.cwd(), './_temp/pages/*.js'))
@@ -57,7 +60,8 @@ async function run() {
 
   // build assets post-render
   console.log('[qmulo] Building Assets')
-  await processAssets()
+  const processed = database.getCollection('processed')
+  await processAssets({ processed })
 
   console.log('[qmulo] Done')
 }

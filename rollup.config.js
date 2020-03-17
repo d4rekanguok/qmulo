@@ -6,10 +6,11 @@ import babel from 'rollup-plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
-import qmulo from './packages/rollup-plugin-qmulo'
-import serve from './packages/rollup-plugin-zeit-serve'
 import css from 'rollup-plugin-css-only'
 import harvest from '@d4rekanguok/harvest/rollup'
+
+import qmulo from './packages/rollup-plugin-qmulo'
+import serve from './packages/rollup-plugin-zeit-serve'
 
 const is_dev = process.env.ROLLUP_WATCH === 'true'
 
@@ -54,7 +55,6 @@ const apply_config = (input, i) => {
       harvest({
         output: path.resolve(__dirname, `_site/js/${name}.extracted.js`)
       }),
-      is_dev && qmulo()
     ],
   }
 }
@@ -64,7 +64,8 @@ const add_dev_plugins = (configs) => {
     configs[configs.length - 1].plugins.push(
       serve({
         public: '_site',
-      })
+      }),
+      qmulo()
     )
   }
 
