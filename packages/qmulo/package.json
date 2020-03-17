@@ -1,5 +1,20 @@
 {
   "name": "qmulo",
-  "main": "./dist/index.js",
-  "version": "1.0.0"
+  "main": "./cjs/index.js",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rollup -c",
+    "prepublishOnly": "rollup -c"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "glob": "^7.1.6",
+    "lokijs": "^1.5.8",
+    "qmulo-plugin-sharp": "workspace:packages/plugin-sharp"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "rollup": "^2.0.6"
+  }
 }

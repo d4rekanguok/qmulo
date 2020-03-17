@@ -1,5 +1,5 @@
 import path from 'path'
-import { transform } from '../../../plugins/sharp'
+import { transform } from 'qmulo-plugin-sharp'
 
 const processList = []
 
