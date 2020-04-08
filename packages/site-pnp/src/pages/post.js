@@ -38,12 +38,7 @@ export function getData() {
 export function render({ data }) {
   const { metadata, content } = data
   return (
-    <HTML head={
-      <>
-        <link rel="stylesheet" type="text/css" href="/css/post.css" />
-        <script src="/js/post.extracted.js" defer />
-      </>
-    }>
+    <HTML>
       <h1 className={headerStyle}>Hello World</h1>
       <div dangerouslySetInnerHTML={{
         __html: content.html,

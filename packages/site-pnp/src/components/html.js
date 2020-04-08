@@ -18,6 +18,8 @@ export const HTML = ({ title = 'Pen&Pillow', children, head = null }) => (
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       <title>{ title }</title>
       <link rel="stylesheet" type="text/css" href="/css/reset.min.css" />
+      <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+      <script src="/js/extracted.js" defer />
       {head}
     </head>
     {/* <script src="/js/instantpage.js" type="module" defer /> */}

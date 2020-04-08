@@ -1,7 +1,7 @@
 import path from 'path'
 import { transform } from 'qmulo-plugin-sharp'
 
-const processList = []
+let processList = []
 
 export function addToProcessList(jobArguments) {
   const { output } = jobArguments
@@ -15,7 +15,8 @@ export function addToProcessList(jobArguments) {
   })
 }
 
-export function processAssets({ processed }) {
+export async function processAssets({ processed }) {
   const processP = processList.map((jobArguments) => transform(jobArguments, { processed }))
-  return Promise.all(processP)
+  await Promise.all(processP)
+  processList = []
 }

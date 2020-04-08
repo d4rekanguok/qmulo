@@ -11,7 +11,6 @@ import { Image } from 'qmulo-plugin-sharp'
 const imageStyle = css`
   position: relative;
   display: block;
-  border: 1px solid red;
 `
 
 const List = ({ post }) => {
@@ -32,12 +31,7 @@ const List = ({ post }) => {
 export function render({ site, collections }) {
   const { post } = collections
   return (
-    <HTML head={
-      <>
-        <link rel="stylesheet" type="text/css" href="/css/main.css" />
-        <script src="/js/main.extracted.js" defer />
-      </>
-    }>
+    <HTML>
       <Test>Hey this should work</Test>
       {site.title} {site.url}
       <h1>Main Page</h1>

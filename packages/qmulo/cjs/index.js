@@ -10,7 +10,7 @@ var glob = _interopDefault(require('glob'));
 var qmuloPluginSharp = require('qmulo-plugin-sharp');
 var Loki = _interopDefault(require('lokijs'));
 
-const processList = [];
+let processList = [];
 
 function addToProcessList(jobArguments) {
   const { output } = jobArguments;
@@ -24,9 +24,10 @@ function addToProcessList(jobArguments) {
   });
 }
 
-function processAssets({ processed }) {
+async function processAssets({ processed }) {
   const processP = processList.map((jobArguments) => qmuloPluginSharp.transform(jobArguments, { processed }));
-  return Promise.all(processP)
+  await Promise.all(processP);
+  processList = [];
 }
 
 let database = null;
@@ -60,12 +61,12 @@ function getDatabase() {
 const buildDir = path.join(process.cwd(), './_site');
 fs.ensureDirSync(buildDir);
 
-// collections
-const collections = {
-  pages: []
-};
-
 async function run() {
+  // collections
+  const collections = {
+    pages: []
+  };
+
   // init database
   const database = await getDatabase();
 
@@ -82,7 +83,7 @@ async function run() {
     }, {});
 
   const allPageData = pages.reduce((acc, page) => {
-    const pageData = processData({ page });
+    const pageData = processData({ collections, page });
     acc = acc.concat(pageData);
     return acc
   }, []);
@@ -117,7 +118,7 @@ async function run() {
 /**
  * group data with tags
  */
-function populateCollection({ data }) {
+function populateCollection({ collections, data }) {
   data.forEach(datum => {
     const { tags: _tags } = datum.metadata;
     if (_tags) {
@@ -144,7 +145,7 @@ function permalinkToUrl(permalink) {
 /**
  * get data from page, also make it always an array
  */
-function processData({ page }) {
+function processData({ collections, page }) {
   const renderer = page.render;
 
   if (typeof page.getData !== 'function') {
@@ -162,7 +163,7 @@ function processData({ page }) {
     return data
   });
 
-  populateCollection({ data: pageData });
+  populateCollection({ collections, data: pageData });
   
   return pageData
 }
@@ -198,6 +199,8 @@ async function renderHTML({
 }) {
   const renderedPage = renderer(data);
   const htmlPath = permalinkToHTMLPath(permalink);
+
+  console.log(`writing ${path.relative(process.cwd(), htmlPath)}`);
 
   await fs.ensureFile(htmlPath);
   await fs.writeFile(htmlPath, renderedPage);
